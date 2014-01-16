@@ -1,3 +1,6 @@
 # -*- coding: utf-8 -*-
 
-print 'recipes!'
+from recipeTree import recipeTree
+
+x = recipeTree()
+x.parseTree("testtree.txt")
