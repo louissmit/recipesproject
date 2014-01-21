@@ -76,7 +76,7 @@ class TreeBuilder:
         d1 = numpy.linalg.norm(v1-subtree.child1.v)
         d2 = numpy.linalg.norm(v2-subtree.child2.v)
 
-        return (d1*w1 + d2*w2)
+        return (d1*w1 + d2*w2)#, v1, subtree.child1.v
 
 
     def train(self, subtree):
@@ -87,13 +87,15 @@ class TreeBuilder:
 
         (v1bar, v2bar) = self.reconstruct(v12c)
 
-        d1 = numpy.square(v1bar-v1)
-        d2 = numpy.square(v2bar-v2)
+        #print v1bar, v1
+
+        d1 = (v1bar-v1)
+        d2 = (v2bar-v2)
 
         w1 = (subtree.child1.n_kids+0.0)/(subtree.child1.n_kids+subtree.child2.n_kids)
         w2 = (subtree.child2.n_kids+0.0)/(subtree.child1.n_kids+subtree.child2.n_kids)
 
-        err =  numpy.concatenate((d1*w1, d2*w2),axis=0)
+        err = numpy.concatenate((d1*w1, d2*w2),axis=0)
 
         v12bar = numpy.concatenate((v1bar, v2bar),axis=0)
 
@@ -103,12 +105,15 @@ class TreeBuilder:
 
         v12c = self.combine(subtree.child1.v,subtree.child2.v)
 
-        delta_w = numpy.outer(errderiv,v12c)
-
-        self.W2 -=delta_w
+        delta_w2 = numpy.outer(errderiv,v12c)
 
 
-        return self.W2
+        err_w1 = numpy.dot(self.W2.T,err)
+
+        #self.W2 -=0.1*delta_w2
+
+
+        return err_w1
 
 
 
@@ -130,19 +135,22 @@ class TreeBuilder:
 
         print '#kids ',t3.n_kids
 
-        for i in xrange(50):
-            self.train(t3)
+        #for i in xrange(50000):
+        #    self.train(t3)
             #t3.create(t1,t2,self.combine(t1.v,t2.v))
-            print 'err nacher', self.getReconstructionError(t3)
+        #    if i%1000 == 0:
+        #        print 'err nacher', self.getReconstructionError(t3)
+
+        print self.train(t3)
 
 
 
 
 
 
-dim = 5
+dim = 2
 labeled = [(['hallo','mein','gott'],5),(['hallo','meine','gott'],5),(['hallo','mein','gotts'],5)]
 unlabeled = [['hallo','mein','gott'],['hallo','meins','gott'],['hallo','mein','gotta']]
 
-t = TreeBuilder(5,labeled,unlabeled)
+t = TreeBuilder(dim,labeled,unlabeled)
 t.test()
