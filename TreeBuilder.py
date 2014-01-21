@@ -17,10 +17,10 @@ class TreeBuilder:
         #initializing the word representation
         self.vocab = self.initialize_vocab()
         #initializing the parameters W1,W2,b1,b2
-        self.W1 = numpy.random.normal(0,0.001,(dim,2*dim))
-        self.W2 = numpy.random.normal(0,0.001,(2*dim,dim))
-        self.b1 = numpy.random.normal(0,0.001,(dim,1))
-        self.b2 = numpy.random.normal(0,0.001,(2*dim,1))
+        self.W1 = numpy.random.normal(0,0.01,(dim,2*dim))
+        self.W2 = numpy.random.normal(0,0.01,(2*dim,dim))
+        self.b1 = numpy.random.normal(0,0.01,(dim,1))
+        self.b2 = numpy.random.normal(0,0.01,(2*dim,1))
 
 
 
@@ -37,7 +37,7 @@ class TreeBuilder:
 
         vocab = dict()
         for w in unique_words:
-            vocab[w] = numpy.random.normal(0,0.001,(dim,1))
+            vocab[w] = numpy.random.normal(0,0.01,(dim,1))
 
         return vocab
 
@@ -76,11 +76,39 @@ class TreeBuilder:
         d1 = numpy.linalg.norm(v1-subtree.child1.v)
         d2 = numpy.linalg.norm(v2-subtree.child2.v)
 
-        return d1*w1 + d2*w2
+        return (d1*w1 + d2*w2)
 
 
     def train(self, subtree):
-        err = self.getReconstructionError(subtree)
+        v1 = subtree.child1.v
+        v2 = subtree.child2.v
+
+        v12c = self.combine(subtree.child1.v,subtree.child2.v)
+
+        (v1bar, v2bar) = self.reconstruct(v12c)
+
+        d1 = numpy.square(v1bar-v1)
+        d2 = numpy.square(v2bar-v2)
+
+        w1 = (subtree.child1.n_kids+0.0)/(subtree.child1.n_kids+subtree.child2.n_kids)
+        w2 = (subtree.child2.n_kids+0.0)/(subtree.child1.n_kids+subtree.child2.n_kids)
+
+        err =  numpy.concatenate((d1*w1, d2*w2),axis=0)
+
+        v12bar = numpy.concatenate((v1bar, v2bar),axis=0)
+
+        deriv = numpy.multiply(1+v12bar,1-v12bar)
+
+        errderiv = numpy.multiply(err,deriv)
+
+        v12c = self.combine(subtree.child1.v,subtree.child2.v)
+
+        delta_w = numpy.outer(errderiv,v12c)
+
+        self.W2 -=delta_w
+
+
+        return self.W2
 
 
 
@@ -102,8 +130,10 @@ class TreeBuilder:
 
         print '#kids ',t3.n_kids
 
-        print 'err', self.getReconstructionError(t3)
-
+        for i in xrange(50):
+            self.train(t3)
+            #t3.create(t1,t2,self.combine(t1.v,t2.v))
+            print 'err nacher', self.getReconstructionError(t3)
 
 
 
