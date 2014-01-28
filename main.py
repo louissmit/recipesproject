@@ -1,6 +1,11 @@
-# -*- coding: utf-8 -*-
+import cPickle as pickle
+from embedding import get_embedding
 
-from recipeTree import recipeTree
+from vocabulary import getVocabulary
+from database import fetchRecipes
 
-x = recipeTree()
-x.parseTree("testtree.txt")
+# ingredients = pickle.load(open('ingredients.p', "rb"))
+# ingredients = [ing for ing, occ in ingredients if occ > 30]
+# get_embedding(ingredients)
+getVocabulary(fetchRecipes())
+
