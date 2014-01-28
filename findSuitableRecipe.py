@@ -29,7 +29,7 @@ for i in xrange(0,len(matrix2)):
 ingre = pickle.load(open("whitelist.set","rb"))
 ingre = list(ingre)
 
-word = ['mustard','onion','sausag']
+word = ['marshmallow', 'vinegar']
 wvec = matrix2[1,:]*0
 
 for w in word:
