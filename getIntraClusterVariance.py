@@ -4,7 +4,8 @@ import json
 import glob
 from ingreProcessor import process
 
-recipes = glob.glob('C:\\Users\\Maaike\\PycharmProjects\\untitled\\recipes\\*.json')
+recipes = glob.glob('/Users/louissmit/Dropbox/recipeproject/recipes/*.json')
+# print recipes
 
 ingredients = dict()
 cuisines = dict()

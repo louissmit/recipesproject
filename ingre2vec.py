@@ -1,9 +1,6 @@
 __author__ = 'Maaike'
 
 
-__author__ = 'Maaike'
-
-
 import glob
 import json
 import nltk
@@ -12,7 +9,7 @@ import numpy
 from ingreProcessor import process
 
 
-recipes = glob.glob('C:\\Users\\Maaike\\PycharmProjects\\untitled\\recipes\\*.json')
+recipes = glob.glob('/Users/louissmit/Dropbox/recipeproject/recipes/*.json')
 ingre = pickle.load(open("whitelist.set","rb"))
 ingre = list(ingre)
 
