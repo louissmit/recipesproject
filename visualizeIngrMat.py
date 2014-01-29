@@ -31,7 +31,7 @@ ingre = list(ingre)
 
 print 'THIS IS THE FIRST INGR',len(matrix2),len(ingre)
 
-f = open('C:\\Users\\Maaike\\PycharmProjects\\untitled\\text sne\\testdata\\ingrevec.txt','w')
+f = open('C:\\Users\\Maaike\\PycharmProjects\\untitled\\text sne\\testdata\\ingrevec2.txt','w')
 
 for i in xrange(0,len(matrix2)):
     stra = ' '.join(map(str, matrix2[i,:]))

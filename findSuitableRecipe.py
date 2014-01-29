@@ -24,12 +24,14 @@ for i in xrange(0,len(matrix2)):
     for j in xrange(0,len(matrix2[i,:])):
         matrix2[i,j]=(matrix2[i,j]+0.0)/length
 
+print len(matrix)
+
 
 #lets find the k-nearest neighbours of some example
 ingre = pickle.load(open("whitelist.set","rb"))
 ingre = list(ingre)
 
-word = ['marshmallow', 'vinegar']
+word = ['salmon','soysauc']
 wvec = matrix2[1,:]*0
 
 for w in word:
@@ -40,5 +42,6 @@ wvec /= len(word)
 for k in recipes.keys():
     recipes[k]=numpy.dot(recipes[k],wvec)
 
-best = dict(sorted(recipes.iteritems(), key=operator.itemgetter(1), reverse=True)[:5])
-print best
+best = dict(sorted(recipes.iteritems(), key=operator.itemgetter(1), reverse=True)[:5]).keys()
+for b in best:
+    print 'http://bigoven.com/recipe/' + str(b)

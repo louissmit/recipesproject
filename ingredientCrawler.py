@@ -9,7 +9,9 @@ from ingreProcessor import process
 
 #nltk.internals.config_java('C:\\Program Files\\Java\\jre6\\bin\\java.exe')
 #st = POSTagger('C:\Users\Maaike\PycharmProjects\untitled\uagger\models\english-bidirectional-distsim.tagger', 'C:\Users\Maaike\PycharmProjects\untitled\uagger\stanford-postagger.jar')
-recipes = glob.glob('C:\\Users\\Maaike\\PycharmProjects\\untitled\\recipes\\*.json')
+recipes = glob.glob('C:\\Users\\Maaike\\PycharmProjects\\recipesproject\\recipes\\*.json')
+
+print len(recipes)
 
 ingredients = dict()
 

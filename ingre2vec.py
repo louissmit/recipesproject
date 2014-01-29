@@ -6,16 +6,19 @@ import json
 import nltk
 import pickle
 import numpy
+from matplotlib.mlab import PCA
 from ingreProcessor import process
 
 
-recipes = glob.glob('/Users/louissmit/Dropbox/recipeproject/recipes/*.json')
+#recipes = glob.glob('/Users/louissmit/Dropbox/recipeproject/recipes/*.json')
+recipes = glob.glob('C:\\Users\\Maaike\\PycharmProjects\\recipesproject\\recipes\\*.json')
+
 ingre = pickle.load(open("whitelist.set","rb"))
 ingre = list(ingre)
 
 matrix = numpy.zeros((len(ingre),len(ingre)))
 
-stemmer = nltk.PorterStemmer()
+#stemmer = nltk.PorterStemmer()
 
 for rec in recipes:
     file = open(rec)
@@ -40,6 +43,24 @@ for rec in recipes:
 
 
 
+for i in xrange(0,len(matrix)):
+    length = numpy.linalg.norm(matrix[i,:])
+    for j in xrange(0,len(matrix[i,:])):
+        matrix[i,j]=(matrix[i,j]+0.0)/length
+
+
+res = PCA(matrix)
+
+matrix2 = res.Y[:,0:50]
+
+for i in xrange(0,len(matrix2)):
+    length = numpy.linalg.norm(matrix2[i,:])
+    for j in xrange(0,len(matrix2[i,:])):
+        matrix2[i,j]=(matrix2[i,j]+0.0)/length
+
 out = open("cooccur.mat","wb")
 pickle.dump(matrix,out)
+
+out2 = open("normalized_ingr_vec.mat","wb")
+pickle.dump(matrix2,out2)
 print matrix

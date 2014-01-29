@@ -6,8 +6,9 @@ from ingreProcessor import process
 import pickle, numpy
 from matplotlib.mlab import PCA
 
-recipes = glob.glob('C:\\Users\\Maaike\\PycharmProjects\\untitled\\recipes\\*.json')
 
+#recipes = glob.glob('C:\\Users\\Maaike\\PycharmProjects\\untitled\\recipes\\*.json')
+recipes = glob.glob('C:\\Users\\Maaike\\PycharmProjects\\recipesproject\\recipes\\*.json')
 
 matrix = pickle.load(open("cooccur.mat","rb"))
 
