@@ -2,18 +2,26 @@ from couchquery import Database
 import time
 import os
 
-def fetchRecipes(sample=False):
-	start = time.time()
-	db = Database('http://localhost:5984/recipes')
+class DatabaseProxy:
+	def __init__(self):
+		self.db = Database('http://localhost:5984/recipes')
+		self.db.sync_design_doc('recipes', os.path.join(os.path.dirname(__file__), 'queries'))
 
-	db.sync_design_doc('recipes', os.path.join(os.path.dirname(__file__), 'queries'))
-	if sample:
-		recipes = db.views.recipes.getSample()
-	else:
-		recipes = db.views.recipes.getValidRecipes()
+	def fetchRecipes(self, sample=False):
+		start = time.time()
 
-	end = time.time()
+		if sample:
+			recipes = self.db.views.recipes.getSample()
+		else:
+			recipes = self.db.views.recipes.getValidRecipes()
 
-	print "database call complete"
-	print end - start
-	return recipes
+		end = time.time()
+
+		print "database call completed in" + (end - start)
+		return recipes
+
+	def getScoredRecipes(self):
+		return self.db.views.recipes.getScoredRecipes()
+
+	def getRecipe(self,id):
+		return self.db.get(id)
